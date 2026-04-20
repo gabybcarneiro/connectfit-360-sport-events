@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: sportsevents
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/sportsevents}
+    username: ${SPRING_DATASOURCE_USERNAME:sportsevents}
+    password: ${SPRING_DATASOURCE_PASSWORD:sportsevents}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+server:
+  port: ${SERVER_PORT:8080}
