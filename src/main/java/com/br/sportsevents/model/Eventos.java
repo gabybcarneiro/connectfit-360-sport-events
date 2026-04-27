@@ -6,11 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,30 +21,50 @@ public class Eventos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
-    private LocalDateTime data;
+    @Column(name = "data_evento")
+    private LocalDateTime dataEvento;
 
-    @Column(nullable = false, length = 100)
-    private String localizacao;
+    @Column(length = 100)
+    private String cidade;
 
-    @Column(name = "tipo", nullable = false, length = 100)
-    private String tipoEvento;
+    @Column(length = 100)
+    private String estado;
 
-    @Column(nullable = false, length = 100)
-    private String modalidade;
+    @Column(length = 100)
+    private String pais;
 
-    @Column(name= "data_inclusao", nullable = false)
+    @Column(name = "id_tipo")
+    private Integer idTipo;
+
+    @Column(name = "id_modalidade", nullable = false)
+    private Integer idModalidade;
+
+    @Column(name = "id_organizacao")
+    private Integer idOrganizacao;
+
+    @Column(name = "imagem_evento")
+    private String imagemEvento;
+
+    @Column(name = "inscricao_aberta")
+    private Boolean inscricaoAberta;
+
+    private Integer vagas;
+
+    @Column(name = "vagas_disponiveis")
+    private Integer vagasDisponiveis;
+
+    @Column(name = "data_inclusao")
     private LocalDateTime dataInclusao;
 
-    @Column(name= "usuario_inclusao", nullable = false)
+    @Column(name = "usuario_inclusao")
     private String usuarioInclusao;
 
-    @Column(name= "data_alteracao", nullable = false)
+    @Column(name = "data_alteracao")
     private LocalDateTime dataAlteracao;
 
-    @Column(name= "usuario_alteracao", nullable = false)
+    @Column(name = "usuario_alteracao")
     private String usuarioAlteracao;
 }

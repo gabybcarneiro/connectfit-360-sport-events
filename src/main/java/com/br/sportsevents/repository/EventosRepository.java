@@ -13,16 +13,16 @@ public interface EventosRepository extends JpaRepository<Eventos, Long> {
     @Query("""
             SELECT e
             FROM Eventos e
-            WHERE (:date IS NULL OR e.data = :date)
-              AND (:location IS NULL OR LOWER(e.localizacao) = LOWER(:location))
-              AND (:eventType IS NULL OR LOWER(e.tipoEvento) = LOWER(:eventType))
-              AND (:modality IS NULL OR LOWER(e.modalidade) = LOWER(:modality))
-            ORDER BY e.data ASC, e.nome ASC
+            WHERE (:date IS NULL OR e.dataEvento = :date)
+              AND (CAST(:cidade AS string) IS NULL OR LOWER(e.cidade) = LOWER(CAST(:cidade AS string)))
+              AND (:idTipo IS NULL OR e.idTipo = :idTipo)
+              AND (:idModalidade IS NULL OR e.idModalidade = :idModalidade)
+            ORDER BY e.dataEvento ASC, e.nome ASC
             """)
     List<Eventos> searchEvents(
             @Param("date") LocalDateTime date,
-            @Param("location") String location,
-            @Param("eventType") String eventType,
-            @Param("modality") Integer modality
+            @Param("cidade") String cidade,
+            @Param("idTipo") Integer idTipo,
+            @Param("idModalidade") Integer idModalidade
     );
 }

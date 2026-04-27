@@ -2,9 +2,11 @@ spring:
   application:
     name: sportsevents
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/connectfit}
-    username: ${SPRING_DATASOURCE_USERNAME:connectfit}
-    password: ${SPRING_DATASOURCE_PASSWORD:Connect360}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/connectfit?currentSchema=sports}
+#    username: ${SPRING_DATASOURCE_USERNAME:connectfit}
+#    password: ${SPRING_DATASOURCE_PASSWORD:Connect360}}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:admingabriela}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

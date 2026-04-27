@@ -9,20 +9,20 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "modalidade")
+@Table(name = "modalidade_evento")
 public class Modalidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false)
     private String descricao;
 
-    @Column(name= "data_inc", nullable = false)
-    private LocalDateTime dataInclusao;
+    @Column(name = "data_inc")
+    private LocalDateTime dataInc;
 
-    @Column(name= "usuario_inc", nullable = false)
-    private String usuarioInclusao;
+    @Column(name = "usuario_inc")
+    private String usuarioInc;
 
 }
