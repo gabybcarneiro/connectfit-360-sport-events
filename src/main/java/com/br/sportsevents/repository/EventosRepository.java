@@ -23,6 +23,6 @@ public interface EventosRepository extends JpaRepository<Eventos, Long> {
             @Param("date") LocalDateTime date,
             @Param("location") String location,
             @Param("eventType") String eventType,
-            @Param("modality") String modality
+            @Param("modality") Integer modality
     );
 }
