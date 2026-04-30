@@ -51,6 +51,7 @@ public class Eventos {
     @Column(name = "inscricao_aberta")
     private Boolean inscricaoAberta;
 
+    @Column(name = "distancia")
     private String distancia;
 
     private Integer vagas;
