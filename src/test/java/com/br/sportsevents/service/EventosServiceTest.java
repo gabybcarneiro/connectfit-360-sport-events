@@ -1,6 +1,8 @@
 package com.br.sportsevents.service;
 
-import com.br.sportsevents.dto.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosCreateDTO;
+import com.br.sportsevents.dto.eventos.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosUpdateDTO;
 import com.br.sportsevents.dto.ModalidadeDTO;
 import com.br.sportsevents.mapper.EventosMapper;
 import com.br.sportsevents.mapper.ModalidadeMapper;
@@ -54,6 +56,7 @@ class EventosServiceTest {
         evento.setCidade("Rio de Janeiro");
         evento.setIdTipo(1);
         evento.setIdModalidade(2);
+        evento.setDistancia("21km");
         List<Eventos> entities = List.of(evento);
 
         EventosDTO dto = new EventosDTO();
@@ -61,13 +64,13 @@ class EventosServiceTest {
         dto.setNome("Meia Maratona do Rio");
         List<EventosDTO> expected = List.of(dto);
 
-        when(eventosRepository.searchEvents(date, "Rio de Janeiro", 1, 2)).thenReturn(entities);
+        when(eventosRepository.searchEvents(date, "Rio de Janeiro", 1, 2, "21km")).thenReturn(entities);
         when(eventosMapper.toDTOList(entities)).thenReturn(expected);
 
-        List<EventosDTO> results = service.searchEvents(date, "Rio de Janeiro", 1, 2);
+        List<EventosDTO> results = service.searchEvents(date, "Rio de Janeiro", 1, 2, "21km");
 
         assertEquals(expected, results);
-        verify(eventosRepository).searchEvents(date, "Rio de Janeiro", 1, 2);
+        verify(eventosRepository).searchEvents(date, "Rio de Janeiro", 1, 2, "21km");
         verify(eventosMapper).toDTOList(entities);
     }
 
@@ -90,28 +93,30 @@ class EventosServiceTest {
     }
 
     @Test
-    void shouldSetAuditDatesAndReturnDTO() {
-        Eventos evento = new Eventos();
-        evento.setNome("Corrida de Rua SP");
-        evento.setCidade("São Paulo");
-        evento.setIdTipo(1);
-        evento.setIdModalidade(2);
-        evento.setUsuarioInclusao("admin");
-        evento.setUsuarioAlteracao("admin");
+    void shouldConvertCreateDTOToEntityAndReturnDTO() {
+        EventosCreateDTO createDTO = new EventosCreateDTO();
+        createDTO.setNome("Corrida de Rua SP");
+        createDTO.setCidade("São Paulo");
+        createDTO.setIdTipo(1);
+        createDTO.setIdModalidade(2);
+        createDTO.setVagas(200);
+
+        Eventos entity = new Eventos();
+        entity.setNome("Corrida de Rua SP");
 
         EventosDTO expected = new EventosDTO();
         expected.setNome("Corrida de Rua SP");
 
-        when(eventosRepository.save(any(Eventos.class))).thenAnswer(inv -> inv.getArgument(0));
-        when(eventosMapper.toDTO(any(Eventos.class))).thenReturn(expected);
+        when(eventosMapper.createToEntity(createDTO)).thenReturn(entity);
+        when(eventosRepository.save(entity)).thenReturn(entity);
+        when(eventosMapper.toDTO(entity)).thenReturn(expected);
 
-        EventosDTO result = service.createEvent(evento);
+        EventosDTO result = service.createEvent(createDTO);
 
-        assertNotNull(evento.getDataInclusao());
-        assertNotNull(evento.getDataAlteracao());
         assertEquals(expected, result);
-        verify(eventosRepository).save(evento);
-        verify(eventosMapper).toDTO(evento);
+        verify(eventosMapper).createToEntity(createDTO);
+        verify(eventosRepository).save(entity);
+        verify(eventosMapper).toDTO(entity);
     }
 
     @Test
@@ -123,18 +128,17 @@ class EventosServiceTest {
         existing.setDataInclusao(LocalDateTime.of(2025, 1, 1, 0, 0));
         existing.setUsuarioInclusao("admin");
 
-        Eventos update = new Eventos();
-        update.setNome("Corrida de Rua SP");
-        update.setDataEvento(LocalDateTime.of(2025, 6, 15, 8, 0));
-        update.setCidade("São Paulo");
-        update.setEstado("SP");
-        update.setPais("Brasil");
-        update.setIdTipo(1);
-        update.setIdModalidade(2);
-        update.setVagas(500);
-        update.setVagasDisponiveis(300);
-        update.setInscricaoAberta(true);
-        update.setUsuarioAlteracao("admin");
+        EventosUpdateDTO updateDTO = new EventosUpdateDTO();
+        updateDTO.setNome("Corrida de Rua SP");
+        updateDTO.setDataEvento(LocalDateTime.of(2025, 6, 15, 8, 0));
+        updateDTO.setCidade("São Paulo");
+        updateDTO.setEstado("SP");
+        updateDTO.setPais("Brasil");
+        updateDTO.setIdTipo(1);
+        updateDTO.setIdModalidade(2);
+        updateDTO.setVagas(500);
+        updateDTO.setVagasDisponiveis(300);
+        updateDTO.setInscricaoAberta(true);
 
         EventosDTO expected = new EventosDTO();
         expected.setNome("Corrida de Rua SP");
@@ -143,9 +147,11 @@ class EventosServiceTest {
         when(eventosRepository.save(any(Eventos.class))).thenAnswer(inv -> inv.getArgument(0));
         when(eventosMapper.toDTO(existing)).thenReturn(expected);
 
-        EventosDTO result = service.updateEvent(1L, update);
+        EventosDTO result = service.updateEvent(1L, updateDTO);
 
         assertEquals(expected, result);
+        assertEquals("Corrida de Rua SP", existing.getNome());
+        assertEquals("São Paulo", existing.getCidade());
         assertNotNull(existing.getDataAlteracao());
         verify(eventosRepository).findById(1L);
         verify(eventosRepository).save(existing);
@@ -156,6 +162,6 @@ class EventosServiceTest {
     void shouldThrowWhenEventNotFound() {
         when(eventosRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> service.updateEvent(99L, new Eventos()));
+        assertThrows(NoSuchElementException.class, () -> service.updateEvent(99L, new EventosUpdateDTO()));
     }
 }

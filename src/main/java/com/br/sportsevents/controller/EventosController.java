@@ -1,8 +1,9 @@
 package com.br.sportsevents.controller;
 
-import com.br.sportsevents.dto.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosCreateDTO;
+import com.br.sportsevents.dto.eventos.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosUpdateDTO;
 import com.br.sportsevents.dto.ModalidadeDTO;
-import com.br.sportsevents.model.Eventos;
 import com.br.sportsevents.service.EventosService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,8 +37,9 @@ public class EventosController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
             @RequestParam(required = false) String cidade,
             @RequestParam(required = false) Integer idTipo,
-            @RequestParam(required = false) Integer idModalidade) {
-        return eventService.searchEvents(date, cidade, idTipo, idModalidade);
+            @RequestParam(required = false) Integer idModalidade,
+            @RequestParam(required = false) String distancia) {
+        return eventService.searchEvents(date, cidade, idTipo, idModalidade, distancia);
     }
 
     @GetMapping("/modalities")
@@ -48,13 +50,13 @@ public class EventosController {
 
     @PostMapping
     @Tag(name = "Cadastrar eventos", description = "API responsavel por cadastrar eventos.")
-    public ResponseEntity<EventosDTO> createEvent(@RequestBody Eventos evento) {
+    public ResponseEntity<EventosDTO> createEvent(@RequestBody EventosCreateDTO evento) {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventService.createEvent(evento));
     }
 
     @PutMapping("/{id}")
     @Tag(name = "Atualizar eventos", description = "API responsavel por atualizar eventos.")
-    public ResponseEntity<EventosDTO> updateEvent(@PathVariable Long id, @RequestBody Eventos evento) {
+    public ResponseEntity<EventosDTO> updateEvent(@PathVariable Long id, @RequestBody EventosUpdateDTO evento) {
         return ResponseEntity.ok(eventService.updateEvent(id, evento));
     }
 }

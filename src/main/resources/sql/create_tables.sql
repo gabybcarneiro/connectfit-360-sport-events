@@ -94,6 +94,7 @@ create table eventos
             references organizacao,
     imagem_evento     varchar,
     inscricao_aberta  boolean,
+    distancia         varchar,
     vagas             integer,
     vagas_disponiveis integer
 );

@@ -1,4 +1,4 @@
-package com.br.sportsevents.dto;
+package com.br.sportsevents.dto.eventos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventosDTO {
+public class EventosCreateDTO {
 
-    private Long id;
     private String nome;
     private LocalDateTime dataEvento;
     private String cidade;
@@ -22,10 +21,7 @@ public class EventosDTO {
     private Integer idOrganizacao;
     private String imagemEvento;
     private Boolean inscricaoAberta;
+    private String distancia;
     private Integer vagas;
     private Integer vagasDisponiveis;
-    private LocalDateTime dataInclusao;
-    private String usuarioInclusao;
-    private LocalDateTime dataAlteracao;
-    private String usuarioAlteracao;
 }

@@ -1,6 +1,8 @@
 package com.br.sportsevents.service;
 
-import com.br.sportsevents.dto.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosCreateDTO;
+import com.br.sportsevents.dto.eventos.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosUpdateDTO;
 import com.br.sportsevents.dto.ModalidadeDTO;
 import com.br.sportsevents.mapper.EventosMapper;
 import com.br.sportsevents.mapper.ModalidadeMapper;
@@ -31,22 +33,20 @@ public class EventosService {
         this.modalidadeMapper = modalidadeMapper;
     }
 
-    public List<EventosDTO> searchEvents(LocalDateTime date, String cidade, Integer idTipo, Integer idModalidade) {
-        return eventosMapper.toDTOList(eventosRepository.searchEvents(date, cidade, idTipo, idModalidade));
+    public List<EventosDTO> searchEvents(LocalDateTime date, String cidade, Integer idTipo, Integer idModalidade, String distancia) {
+        return eventosMapper.toDTOList(eventosRepository.searchEvents(date, cidade, idTipo, idModalidade, distancia));
     }
 
     public List<ModalidadeDTO> getAllModality() {
         return modalidadeMapper.toDTOList(modalidadeRepository.findAll());
     }
 
-    public EventosDTO createEvent(Eventos evento) {
-        LocalDateTime now = LocalDateTime.now();
-        evento.setDataInclusao(now);
-        evento.setDataAlteracao(now);
+    public EventosDTO createEvent(EventosCreateDTO dto) {
+        Eventos evento = eventosMapper.createToEntity(dto);
         return eventosMapper.toDTO(eventosRepository.save(evento));
     }
 
-    public EventosDTO updateEvent(Long id, Eventos evento) {
+    public EventosDTO updateEvent(Long id, EventosUpdateDTO evento) {
         Eventos existing = eventosRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento não encontrado: " + id));
         existing.setNome(evento.getNome());
@@ -59,9 +59,10 @@ public class EventosService {
         existing.setIdOrganizacao(evento.getIdOrganizacao());
         existing.setImagemEvento(evento.getImagemEvento());
         existing.setInscricaoAberta(evento.getInscricaoAberta());
+        existing.setDistancia(evento.getDistancia());
         existing.setVagas(evento.getVagas());
         existing.setVagasDisponiveis(evento.getVagasDisponiveis());
-        existing.setUsuarioAlteracao(evento.getUsuarioAlteracao());
+        existing.setUsuarioAlteracao("sistemas");
         existing.setDataAlteracao(LocalDateTime.now());
         return eventosMapper.toDTO(eventosRepository.save(existing));
     }

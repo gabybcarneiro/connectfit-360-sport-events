@@ -1,9 +1,11 @@
 package com.br.sportsevents.mapper;
 
-import com.br.sportsevents.dto.EventosDTO;
+import com.br.sportsevents.dto.eventos.EventosCreateDTO;
+import com.br.sportsevents.dto.eventos.EventosDTO;
 import com.br.sportsevents.model.Eventos;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -22,6 +24,7 @@ public class EventosMapper {
         dto.setIdOrganizacao(e.getIdOrganizacao());
         dto.setImagemEvento(e.getImagemEvento());
         dto.setInscricaoAberta(e.getInscricaoAberta());
+        dto.setDistancia(e.getDistancia());
         dto.setVagas(e.getVagas());
         dto.setVagasDisponiveis(e.getVagasDisponiveis());
         dto.setDataInclusao(e.getDataInclusao());
@@ -33,5 +36,44 @@ public class EventosMapper {
 
     public List<EventosDTO> toDTOList(List<Eventos> eventos) {
         return eventos.stream().map(this::toDTO).toList();
+    }
+
+    public Eventos toEntity(EventosDTO dto) {
+        Eventos e = new Eventos();
+        e.setNome(dto.getNome());
+        e.setDataEvento(dto.getDataEvento());
+        e.setCidade(dto.getCidade());
+        e.setEstado(dto.getEstado());
+        e.setPais(dto.getPais());
+        e.setIdTipo(dto.getIdTipo());
+        e.setIdModalidade(dto.getIdModalidade());
+        e.setIdOrganizacao(dto.getIdOrganizacao());
+        e.setImagemEvento(dto.getImagemEvento());
+        e.setInscricaoAberta(dto.getInscricaoAberta());
+        e.setDistancia(dto.getDistancia());
+        e.setVagas(dto.getVagas());
+        e.setVagasDisponiveis(dto.getVagasDisponiveis());
+        e.setUsuarioInclusao("sistema");
+        return e;
+    }
+
+    public Eventos createToEntity(EventosCreateDTO dto) {
+        Eventos e = new Eventos();
+        e.setNome(dto.getNome());
+        e.setDataEvento(dto.getDataEvento());
+        e.setCidade(dto.getCidade());
+        e.setEstado(dto.getEstado());
+        e.setPais(dto.getPais());
+        e.setIdTipo(dto.getIdTipo());
+        e.setIdModalidade(dto.getIdModalidade());
+        e.setIdOrganizacao(dto.getIdOrganizacao());
+        e.setImagemEvento(dto.getImagemEvento());
+        e.setInscricaoAberta(dto.getInscricaoAberta());
+        e.setDistancia(dto.getDistancia());
+        e.setVagas(dto.getVagas());
+        e.setVagasDisponiveis(dto.getVagasDisponiveis());
+        e.setUsuarioInclusao("sistema");
+        e.setDataInclusao(LocalDateTime.now());
+        return e;
     }
 }
